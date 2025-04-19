@@ -6,7 +6,6 @@ const public_users = express.Router();
 
 
 public_users.post("/register", (req,res) => {
-  console.log(req.body);
   const username = req.body.username;
   const password = req.body.password;
 
