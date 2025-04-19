@@ -24,11 +24,28 @@ public_users.post("/register", (req,res) => {
   return res.status(200).json({message: "User registered successfully"});
 });
 
-// Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  // Send books data
-  res.status(200).json({ message: "Books retrieved successfully", books: books });
+// Get the book list available in the shop (async)
+public_users.get('/', async function (req, res) {
+  try {
+    const getBooks = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (books) {
+          resolve(books);
+        } else {
+          reject(new Error("Book data is not available"));
+        }
+      }, 50); 
+    });
+
+    const fetchedBooks = await getBooks;
+    res.status(200).json({ message: "Books retrieved successfully", books: fetchedBooks });
+
+  } catch (error) {
+    console.error("Error fetching books:", error);
+    res.status(500).json({ message: "Failed to retrieve books" });
+  }
 });
+
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn', function (req, res) {
