@@ -44,9 +44,7 @@ regd_users.post("/login", (req,res) => {
 regd_users.put("/auth/review/:isbn", (req, res) => {
   const isbn = req.params.isbn;
   const review = req.body.review;
-  console.log('review: ',review);
   const username = req.user.username; // Get username from session/token
-  console.log('username: ',username);
 
   if (!isbn || !review) {
     return res.status(400).json({message: "ISBN and review are required"});
@@ -54,15 +52,14 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   
   // Check if the book exists using the isbn as the key in the object
   const book = books[isbn]; 
-  console.log('book found: ', book);
   if (!book) { // If the key doesn't exist, book will be undefined
     return res.status(404).json({message: "Book not found"});
   }
 
-    // Add review to the book
-    book.reviews = review;
-    return res.status(200).json({message: "Review added successfully"});
-  
+     // Add or update review keyed by username
+     book.reviews[username] = review;
+     return res.status(200).json({message: "Review added/updated successfully for user " + username});
+   
 });
 
 module.exports.authenticated = regd_users;
