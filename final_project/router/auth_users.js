@@ -29,10 +29,8 @@ regd_users.post("/login", (req,res) => {
     return res.status(401).json({message: "Invalid username or password"});
   }
 
-  // Generate JWT token
+  // Generate JWT token and store in session
   const token = jwt.sign({username: username}, "access", {expiresIn: "1h"});
-
-  // Store token in session
   req.session.authorization = {
     accessToken: token
   };
@@ -44,15 +42,14 @@ regd_users.post("/login", (req,res) => {
 regd_users.put("/auth/review/:isbn", (req, res) => {
   const isbn = req.params.isbn;
   const review = req.body.review;
-  const username = req.user.username; // Get username from session/token
+  const username = req.user.username; 
 
   if (!isbn || !review) {
     return res.status(400).json({message: "ISBN and review are required"});
   }
   
-  // Check if the book exists using the isbn as the key in the object
   const book = books[isbn]; 
-  if (!book) { // If the key doesn't exist, book will be undefined
+  if (!book) {
     return res.status(404).json({message: "Book not found"});
   }
 

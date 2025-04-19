@@ -24,7 +24,7 @@ public_users.post("/register", (req,res) => {
   return res.status(200).json({message: "User registered successfully"});
 });
 
-// Get the book list available in the shop (async)
+// Get the book list available in the shop
 public_users.get('/', async function (req, res) {
   try {
     const getBooks = new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ public_users.get('/', async function (req, res) {
 });
 
 
-// Get book details based on ISBN (async)
+// Get book details based on ISBN
 public_users.get('/isbn/:isbn', async function (req, res) {
   const isbn = req.params.isbn;
   try {
@@ -117,7 +117,6 @@ public_users.get('/title/:title',async function (req, res) {
         console.error("Error fetching books by title: " + title, error);
         res.status(500).json({ message: "Failed to retrieve book details" });
   }
-
 
 });
 
